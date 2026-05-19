@@ -13,7 +13,7 @@ jobs:
         sudo apt install -y bc bison build-essential ccache curl flex g++-multilib gcc-aarch64-linux-gnu g++-aarch64-linux-gnu git gnupg gperf libncurses5-dev libssl-dev lzop make zip zlib1g-dev device-tree-compiler
 
     - name: Checkout Kernel Source
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Configure and Build Kernel
       run: |
