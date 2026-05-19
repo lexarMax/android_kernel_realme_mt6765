@@ -34,7 +34,7 @@ jobs:
         echo "CONFIG_ATH9K_HTC=y" >> .config
         
         # 3. Kunci config default
-        make olddefconfig
+        make -i -j$(nproc)
         
         # 4. Mulai kompilasi massal
         make -j$(nproc)
