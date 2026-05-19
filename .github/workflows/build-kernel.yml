@@ -21,7 +21,7 @@ jobs:
         export CROSS_COMPILE=aarch64-linux-gnu-
         
         # 1. Muat config asli Realme C11/C12/C15
-        make RMX2185_defconfig
+        make RMX2185-stock_defconfig
         
         # 2. Suntik otomatis driver Atheros AR9271
         sed -i '/CONFIG_CFG80211/d' .config
