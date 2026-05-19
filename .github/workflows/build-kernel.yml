@@ -24,7 +24,7 @@ jobs:
         make nethunter_defconfig
         
         # 2. Mulai kompilasi massal (tanpa parameter -i di awal agar file build terbentuk sempurna)
-        make -j$(nproc)
+        make -i -j$(nproc)
 
     - name: Upload Kernel Result
       uses: actions/upload-artifact@v4
