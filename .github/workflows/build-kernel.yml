@@ -1,0 +1,47 @@
+name: Build NetHunter Kernel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download Toolchain & Dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y bc bison build-essential ccache curl flex g++-multilib gcc-aarch64-linux-gnu g++-aarch64-linux-gnu git gnupg gperf libncurses5-dev libssl-dev lzop make zip zlib1g-dev device-tree-compiler
+
+    - name: Checkout Kernel Source
+      uses: actions/checkout@v3
+
+    - name: Configure and Build Kernel
+      run: |
+        export ARCH=arm64
+        export CROSS_COMPILE=aarch64-linux-gnu-
+
+        # 1. Muat config asli Realme C11/C12/C15
+        make RMX2185_defconfig
+
+        # 2. Suntik otomatis driver Atheros AR9271
+        sed -i '/CONFIG_CFG80211/d' .config
+        sed -i '/CONFIG_MAC80211/d' .config
+        sed -i '/CONFIG_ATH9K/d' .config
+        echo "CONFIG_CFG80211=y" >> .config
+        echo "CONFIG_CFG80211_WEXT=y" >> .config
+        echo "CONFIG_MAC80211=y" >> .config
+        echo "CONFIG_ATH_CARDS=y" >> .config
+        echo "CONFIG_ATH9K_HTC=y" >> .config
+
+        # 3. Kunci config default
+        make olddefconfig
+
+        # 4. Mulai kompilasi massal
+        make -j$(nproc)
+
+    - name: Upload Kernel Result
+      uses: actions/upload-artifact@v3
+      with:
+        name: Image.gz-dtb-NetHunter
+        path: arch/arm64/boot/Image.gz-dtb
+
