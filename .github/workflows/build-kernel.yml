@@ -20,23 +20,10 @@ jobs:
         export ARCH=arm64
         export CROSS_COMPILE=aarch64-linux-gnu-
         
-        # 1. Muat config asli Realme C11/C12/C15
-        make RMX2185-stock_defconfig
+        # 1. Gunakan config NetHunter asli bawaan repo yang sudah matang & bebas interogasi teks
+        make nethunter_defconfig
         
-        # 2. Suntik otomatis driver Atheros AR9271
-        sed -i '/CONFIG_CFG80211/d' .config
-        sed -i '/CONFIG_MAC80211/d' .config
-        sed -i '/CONFIG_ATH9K/d' .config
-        echo "CONFIG_CFG80211=y" >> .config
-        echo "CONFIG_CFG80211_WEXT=y" >> .config
-        echo "CONFIG_MAC80211=y" >> .config
-        echo "CONFIG_ATH_CARDS=y" >> .config
-        echo "CONFIG_ATH9K_HTC=y" >> .config
-        
-        # 3. Kunci config default
-        make -i -j$(nproc)
-        
-        # 4. Mulai kompilasi massal
+        # 2. Mulai kompilasi massal (tanpa parameter -i di awal agar file build terbentuk sempurna)
         make -j$(nproc)
 
     - name: Upload Kernel Result
